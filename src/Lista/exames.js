@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator, TextInput, ScrollView, Dimensions } from 'react-native';
 import { Card, Button } from 'react-native-elements';
 
-function ListaScreen({ route }) {
+function ExameScreen({ route }) {
   const { cpf } = route.params;
 
   const [data, setData] = useState([]);
@@ -20,7 +20,7 @@ function ListaScreen({ route }) {
           body: new URLSearchParams({
             'usuario': 'fabamedapi',
             'senha': 'Faba@api2023',
-            'tipo': ' and p.a_cpf='+cpf+'',
+            'tipo': " and p.a_cpf="+cpf+" and cs.a_tipo in ("'E'", "'R'", "'T'")",
             'depara': '26',
             'TIPOINTEGRACAO_APIMOBILE': 'S',
           }),
@@ -66,7 +66,7 @@ function ListaScreen({ route }) {
       padding: 5,
     },
     card: {
-      borderColor: 'red', // Borda vermelha
+      borderColor: 'green', // Borda vermelha
       borderWidth: 2,
       marginBottom: 10,
     },
@@ -110,4 +110,4 @@ function ListaScreen({ route }) {
   );
 }
 
-export default ListaScreen;
+export default ExameScreen;

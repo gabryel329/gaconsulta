@@ -1,117 +1,112 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableHighlight, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Image } from 'react-native';
 
 function LoginScreen({ navigation }) {
   const [cpf, setCPF] = useState('');
 
   const handleLogin = () => {
-
-    navigation.navigate('Lista', { cpf });
-    
+    if (cpf.length === 11) {
+      navigation.navigate('Menu', { cpf });
+    } else {
+      setError('Digite um CPF válido');
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <KeyboardAvoidingView>
-        <div >
-          <TextInput
-            placeholder="CPF"
-            value={cpf}
-            style={styles.title}
-            onChangeText={setCPF}
-            autoCapitalize="none"
-            autoCorrect={false}
-          />
-          <TouchableOpacity onPress={handleLogin}
-              style={styles.butao}>
-              <Text style={styles.textbutton}>ENTRAR</Text>
-          </TouchableOpacity>
-        </div>
-      </KeyboardAvoidingView>
+      <View style={styles.card}>
+        <View style={styles.titleContainer}>
+          <Text style={styles.bigText}>GA</Text>
+          <Text style={styles.smallText}>Consulta</Text>
+        </View>
+        <TextInput
+          placeholder="CPF"
+          value={cpf}
+          style={styles.input}
+          onChangeText={text => {
+            // Remove qualquer caractere não numérico
+            const numericValue = text.replace(/\D/g, '');
+            setCPF(numericValue);
+          }}
+          keyboardType="numeric"
+          maxLength={11} // Limita a 11 caracteres
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
+        <TouchableOpacity onPress={handleLogin} style={styles.button}>
+          <Text style={styles.buttonText}>ENTRAR</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
-      backgroundColor: "#fafafa",
+    flex: 1,
+    backgroundColor: '#fafafa',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  list: {
-      padding: 20
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+    width: '80%',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  logo: {
-      height: 100,
-      width: 100
+  titleContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
   },
-  containerlista: {
-      backgroundColor: "transparent",
-      justifyContent: "center",
-      alignItems: "center",
-      height: 42,
-      marginTop: "50%"
+  bigText: {
+    fontSize: 80,
+    fontWeight: 'Copperplate',
+    color: '#2174d4',
+  },
+  smallText: {
+    fontSize: 15,
+    fontWeight: 'Copperplate',
+    color: '#ff0000',
   },
   title: {
-      fontSize: 20,
-      fontWeight: "bold",
-      justifyContent: "center",
-      color: "#999"
+    fontSize: 20,
+    fontWeight: 'Copperplate',
+    color: '#999',
+    marginTop: 10,
   },
-  descricao: {
-
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    margin: 10,
+    padding: 5,
+    width: '100%',
   },
-  butao: {
-      height: 42,
-      borderRadius: 5,
-      borderWidth: 2,
-      borderColor: "#006400",
-      backgroundColor: "#006400",
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 10,
+  button: {
+    height: 42,
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: '#2174d4',
+    backgroundColor: '#2174d4',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+    width: '100%',
   },
-  butao2: {
-      height: 42,
-      borderRadius: 5,
-      borderWidth: 2,
-      borderColor: "#3b5998",
-      backgroundColor: "#3b5998",
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 10,
+  buttonText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#fff',
   },
-  butao3: {
-      height: 42,
-      borderRadius: 5,
-      borderWidth: 2,
-      borderColor: "#B22222",
-      backgroundColor: "#B22222",
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 10,
-  },
-  textbutton:
-  {
-      fontSize: 14,
-      fontWeight: "bold",
-      color: "#fff"
-  },
-  textbutton2:
-  {
-      fontSize: 14,
-      fontWeight: "bold",
-      color: "#fff"
-  },
-  textbutton3:
-  {
-      fontSize: 14,
-      fontWeight: "bold",
-      color: "#fff"
-  },
-  CARDX: {
-      marginTop: 100,
-  }
-})
+});
 
 export default LoginScreen;

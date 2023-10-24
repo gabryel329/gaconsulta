@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator, TextInput, ScrollView, Dimensions } from 'react-native';
 import { Card, Button } from 'react-native-elements';
 
-function ListaScreen({ route }) {
+function MarcacaoScreen({ route }) {
   const { cpf } = route.params;
 
   const [data, setData] = useState([]);
@@ -20,8 +20,8 @@ function ListaScreen({ route }) {
           body: new URLSearchParams({
             'usuario': 'fabamedapi',
             'senha': 'Faba@api2023',
-            'tipo': ' and p.a_cpf='+cpf+'',
-            'depara': '26',
+            'tipo': cpf,
+            'depara': '27',
             'TIPOINTEGRACAO_APIMOBILE': 'S',
           }),
         });
@@ -39,9 +39,8 @@ function ListaScreen({ route }) {
 
   const dadosFiltrados = data.filter((item) =>
     item.variaveis.procedimento.toLowerCase().includes(filtro.toLowerCase()) || 
-    item.variaveis.atendimento.toLowerCase().includes(filtro.toLowerCase()) ||
-    item.variaveis.entrada.toLowerCase().includes(filtro.toLowerCase()) ||
-    item.variaveis.cps.toLowerCase().includes(filtro.toLowerCase()) ||
+    item.variaveis.codigoamb.toLowerCase().includes(filtro.toLowerCase()) ||
+    item.variaveis.data.toLowerCase().includes(filtro.toLowerCase()) ||
     item.variaveis.especialidade.toLowerCase().includes(filtro.toLowerCase()) ||
     item.variaveis.medico.toLowerCase().includes(filtro.toLowerCase())
   );
@@ -66,7 +65,7 @@ function ListaScreen({ route }) {
       padding: 5,
     },
     card: {
-      borderColor: 'red', // Borda vermelha
+      borderColor: 'yellow', // Borda vermelha
       borderWidth: 2,
       marginBottom: 10,
     },
@@ -90,18 +89,18 @@ function ListaScreen({ route }) {
         {dadosFiltrados.map((item, index) => (
           <Card key={index} containerStyle={styles.card}>
             <View style={styles.cardContent}>
-              <Text style={styles.cardText}>Código Atendimento:</Text>
-              <Text>{item.variaveis.cps}</Text>
-              <Text style={styles.cardText}>Entrada:</Text>
-              <Text>{item.variaveis.entrada}</Text>
+              <Text style={styles.cardText}>Data/Hora:</Text>
+              <Text>{item.variaveis.data} - {item.variaveis.hora}</Text>
               <Text style={styles.cardText}>Médico:</Text>
               <Text>{item.variaveis.medico}</Text>
               <Text style={styles.cardText}>Especialidade:</Text>
               <Text>{item.variaveis.especialidade}</Text>
               <Text style={styles.cardText}>Procedimento:</Text>
               <Text>{item.variaveis.procedimento}</Text>
-              <Text style={styles.cardText}>Atendimento:</Text>
-              <Text>{item.variaveis.atendimento}</Text>
+              <Text style={styles.cardText}>Codigo AMB:</Text>
+              <Text>{item.variaveis.codigoamb}</Text>
+              <Text style={styles.cardText}>Observação:</Text>
+              <Text>{item.variaveis.observacao}</Text>
             </View>
           </Card>
         ))}
@@ -110,4 +109,4 @@ function ListaScreen({ route }) {
   );
 }
 
-export default ListaScreen;
+export default MarcacaoScreen;
