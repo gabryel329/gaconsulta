@@ -1,18 +1,57 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator, TextInput, ScrollView, Dimensions } from 'react-native';
-import { Card, Button } from 'react-native-elements';
+import { View, Text, StyleSheet, SafeAreaView, ActivityIndicator, TextInput, ScrollView } from 'react-native';
+import { Card } from 'react-native-elements';
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: 'gray' },
+  input: {
+    height: 40,
+    backgroundColor: '#fff',
+    borderColor: '#fff',
+    borderWidth: 1,
+    margin: 10,
+    padding: 5,
+  },
+  card: {
+    borderColor: '#e00000',
+    backgroundColor: '#fff',
+    borderWidth: 2,
+    marginBottom: 10,
+  },
+  cardContent: {
+    padding: 10,
+  },
+  cardText: {
+    fontWeight: 'bold',
+  },
+  cardHeader: {
+    backgroundColor: '#2174d4',
+    alignItems: 'center',
+    padding: 10,
+  },
+  cardHeaderText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  cardHeaderTextValue: {
+    color: 'white',
+    fontSize: 16,
+  },
+});
 
 function ListaScreen({ route }) {
   const { cpf } = route.params;
+  const { cnpj } = route.params;
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filtro, setFiltro] = useState('');
-
+  
   useEffect(() => {
     async function fetchData() {
-      try {
-        const response = await fetch('http://localhost:8030/api/v1/retornaAtendimentos.asp', {
+      try {         
+        const w_primeiro = await fetch('http://localhost:8030/api/v1/retornaAtendimentos.asp', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -20,13 +59,31 @@ function ListaScreen({ route }) {
           body: new URLSearchParams({
             'usuario': 'fabamedapi',
             'senha': 'Faba@api2023',
-            'tipo': ' and p.a_cpf='+cpf+'',
+            'tipo': cnpj,
+            'depara': '28',
+            'TIPOINTEGRACAO_APIMOBILE': 'S',
+          }),
+        });
+        const primeiro = await w_primeiro.json(); 
+
+        
+
+        const secondResponse = await fetch(''+primeiro.variavel+'', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({
+            'usuario': 'fabamedapi',
+            'senha': 'Faba@api2023',
+            'tipo': cpf,
             'depara': '26',
             'TIPOINTEGRACAO_APIMOBILE': 'S',
           }),
         });
-        const result = await response.json();
-        setData(result);
+        const secondResult = await secondResponse.json();  
+
+        setData(secondResult);
       } catch (error) {
         console.error('Erro ao consultar a API:', error);
       } finally {
@@ -35,10 +92,10 @@ function ListaScreen({ route }) {
     }
 
     fetchData();
-  }, [cpf]);
+  }, [cpf, cnpj]);
 
   const dadosFiltrados = data.filter((item) =>
-    item.variaveis.procedimento.toLowerCase().includes(filtro.toLowerCase()) || 
+    item.variaveis.procedimento.toLowerCase().includes(filtro.toLowerCase()) ||
     item.variaveis.atendimento.toLowerCase().includes(filtro.toLowerCase()) ||
     item.variaveis.entrada.toLowerCase().includes(filtro.toLowerCase()) ||
     item.variaveis.cps.toLowerCase().includes(filtro.toLowerCase()) ||
@@ -54,30 +111,6 @@ function ListaScreen({ route }) {
     );
   }
 
-  const { width, height } = Dimensions.get('window');
-
-  const styles = StyleSheet.create({
-    container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
-    input: {
-      height: 40,
-      borderColor: 'gray',
-      borderWidth: 1,
-      margin: 10,
-      padding: 5,
-    },
-    card: {
-      borderColor: 'red', // Borda vermelha
-      borderWidth: 2,
-      marginBottom: 10,
-    },
-    cardContent: {
-      padding: 10,
-    },
-    cardText: {
-      fontWeight: 'bold', // Texto em negrito
-    },
-  });
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
@@ -89,19 +122,31 @@ function ListaScreen({ route }) {
         />
         {dadosFiltrados.map((item, index) => (
           <Card key={index} containerStyle={styles.card}>
+            <View style={styles.cardHeader}>
+              <Text style={styles.cardHeaderText}>Atendimento</Text>
+              <Text style={styles.cardHeaderTextValue}>{item.variaveis.atendimento}</Text>
+            </View>
             <View style={styles.cardContent}>
-              <Text style={styles.cardText}>Código Atendimento:</Text>
-              <Text>{item.variaveis.cps}</Text>
-              <Text style={styles.cardText}>Entrada:</Text>
-              <Text>{item.variaveis.entrada}</Text>
-              <Text style={styles.cardText}>Médico:</Text>
-              <Text>{item.variaveis.medico}</Text>
-              <Text style={styles.cardText}>Especialidade:</Text>
-              <Text>{item.variaveis.especialidade}</Text>
-              <Text style={styles.cardText}>Procedimento:</Text>
-              <Text>{item.variaveis.procedimento}</Text>
-              <Text style={styles.cardText}>Atendimento:</Text>
-              <Text>{item.variaveis.atendimento}</Text>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardText}>Código Atendimento:</Text>
+                <Text>{item.variaveis.cps}</Text>
+              </View>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardText}>Entrada:</Text>
+                <Text>{item.variaveis.entrada}</Text>
+              </View>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardText}>Médico:</Text>
+                <Text>{item.variaveis.medico}</Text>
+              </View>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardText}>Especialidade:</Text>
+                <Text>{item.variaveis.especialidade}</Text>
+              </View>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardText}>Procedimento:</Text>
+                <Text>{item.variaveis.procedimento}</Text>
+              </View>
             </View>
           </Card>
         ))}

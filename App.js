@@ -17,7 +17,7 @@ function App() {
         <Stack.Screen name="Menu" component={Menu} />
         <Stack.Screen name="Atendimentos" component={Lista} />
         <Stack.Screen name="Exames" component={Exame} />
-        <Stack.Screen name="Marcacao" component={Marcacao} />
+        <Stack.Screen name="Marcacoes" component={Marcacao} />
       </Stack.Navigator>
     </NavigationContainer>
   );

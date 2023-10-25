@@ -3,10 +3,11 @@ import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, KeyboardAv
 
 function LoginScreen({ navigation }) {
   const [cpf, setCPF] = useState('');
+  const [cnpj, setCNPJ] = useState('');
 
   const handleLogin = () => {
-    if (cpf.length === 11) {
-      navigation.navigate('Menu', { cpf });
+    if (cpf.length === 11 && cnpj.length === 13) {
+      navigation.navigate('Menu', { cpf , cnpj });
     } else {
       setError('Digite um CPF válido');
     }
@@ -16,9 +17,23 @@ function LoginScreen({ navigation }) {
     <View style={styles.container}>
       <View style={styles.card}>
         <View style={styles.titleContainer}>
-          <Text style={styles.bigText}>GA</Text>
-          <Text style={styles.smallText}>Consulta</Text>
+          <Text style={styles.bigText}><strong>GA</strong></Text>
+          <Text style={styles.smallText}><strong>Consulta</strong></Text>
         </View>
+        <TextInput
+          placeholder="CNPJ"
+          value={cnpj}
+          style={styles.input}
+          onChangeText={text => {
+            // Remove qualquer caractere não numérico
+            const numericValue = text.replace(/\D/g, '');
+            setCNPJ(numericValue);
+          }}
+          keyboardType="numeric"
+          maxLength={13} // Limita a 11 caracteres
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
         <TextInput
           placeholder="CPF"
           value={cpf}
@@ -44,7 +59,7 @@ function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fafafa',
+    backgroundColor: '#2174d4',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -66,6 +81,13 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'column',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'gray',
+    padding: 10,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
   },
   bigText: {
     fontSize: 80,
@@ -75,7 +97,7 @@ const styles = StyleSheet.create({
   smallText: {
     fontSize: 15,
     fontWeight: 'Copperplate',
-    color: '#ff0000',
+    color: '#e00000',
   },
   title: {
     fontSize: 20,
@@ -93,7 +115,7 @@ const styles = StyleSheet.create({
   },
   button: {
     height: 42,
-    borderRadius: 5,
+    borderRadius: 10,
     borderWidth: 2,
     borderColor: '#2174d4',
     backgroundColor: '#2174d4',
@@ -101,6 +123,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
     width: '100%',
+
   },
   buttonText: {
     fontSize: 14,

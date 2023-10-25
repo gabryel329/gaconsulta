@@ -20,8 +20,9 @@ function ExameScreen({ route }) {
           body: new URLSearchParams({
             'usuario': 'fabamedapi',
             'senha': 'Faba@api2023',
-            'tipo': " and p.a_cpf="+cpf+" and cs.a_tipo in ("'E'", "'R'", "'T'")",
+            'tipo': cpf,
             'depara': '26',
+            'exame': 'S',
             'TIPOINTEGRACAO_APIMOBILE': 'S',
           }),
         });
@@ -57,16 +58,18 @@ function ExameScreen({ route }) {
   const { width, height } = Dimensions.get('window');
 
   const styles = StyleSheet.create({
-    container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
+    container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: 'gray' },
     input: {
       height: 40,
-      borderColor: 'gray',
+      borderColor: '#fff',
+      backgroundColor: '#fff',
       borderWidth: 1,
       margin: 10,
       padding: 5,
     },
     card: {
-      borderColor: 'green', // Borda vermelha
+      borderColor: '#e00000',
+      backgroundColor: '#fff',
       borderWidth: 2,
       marginBottom: 10,
     },
@@ -75,6 +78,20 @@ function ExameScreen({ route }) {
     },
     cardText: {
       fontWeight: 'bold', // Texto em negrito
+    },
+    cardHeader: {
+      backgroundColor: '#2174d4',
+      alignItems: 'center',
+      padding: 10,
+    },
+    cardHeaderText: {
+      color: 'white',  // Cor do texto branco
+      fontWeight: 'bold',  // Texto em negrito
+      fontSize: 16,  // Tamanho da fonte
+    },
+    cardHeaderTextValue: {
+      color: 'white',  // Cor do texto branco
+      fontSize: 16,  // Tamanho da fonte
     },
   });
 
@@ -89,19 +106,31 @@ function ExameScreen({ route }) {
         />
         {dadosFiltrados.map((item, index) => (
           <Card key={index} containerStyle={styles.card}>
-            <View style={styles.cardContent}>
-              <Text style={styles.cardText}>Código Atendimento:</Text>
-              <Text>{item.variaveis.cps}</Text>
-              <Text style={styles.cardText}>Entrada:</Text>
-              <Text>{item.variaveis.entrada}</Text>
-              <Text style={styles.cardText}>Médico:</Text>
-              <Text>{item.variaveis.medico}</Text>
-              <Text style={styles.cardText}>Especialidade:</Text>
-              <Text>{item.variaveis.especialidade}</Text>
-              <Text style={styles.cardText}>Procedimento:</Text>
-              <Text>{item.variaveis.procedimento}</Text>
-              <Text style={styles.cardText}>Atendimento:</Text>
-              <Text>{item.variaveis.atendimento}</Text>
+            <View style={styles.cardHeader}>
+              <Text style={styles.cardHeaderText}>Atendimento</Text>
+              <Text style={styles.cardHeaderTextValue}>{item.variaveis.atendimento}</Text>
+            </View>
+            <View style={styles.cardBody}>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardText}>Código Atendimento:</Text>
+                <Text>{item.variaveis.cps}</Text>
+              </View>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardText}>Entrada:</Text>
+                <Text>{item.variaveis.entrada}</Text>
+              </View>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardText}>Médico:</Text>
+                <Text>{item.variaveis.medico}</Text>
+              </View>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardText}>Especialidade:</Text>
+                <Text>{item.variaveis.especialidade}</Text>
+              </View>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardText}>Procedimento:</Text>
+                <Text>{item.variaveis.procedimento}</Text>
+              </View>
             </View>
           </Card>
         ))}
